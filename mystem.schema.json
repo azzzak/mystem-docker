@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MyStem JSON Schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "analysis": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lex": {
+              "description": "лемма",
+              "type": "string"
+            },
+            "wt": {
+              "description": "бесконтекстная вероятность леммы",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "qual": {
+              "description": "особые отметки",
+              "type": "string"
+            },
+            "gr": {
+              "description": "граммемы",
+              "type": "string"
+            }
+          },
+          "required": ["lex", "wt", "gr"]
+        },
+        "text": {
+          "description": "исходная словоформа",
+          "type": "string"
+        }
+      }
+    },
+    "required": ["analysis", "text"]
+  }
+}
