@@ -1,4 +1,4 @@
-# mystem-docker
+# mystem-docker [![Go Report Card](https://goreportcard.com/badge/github.com/azzzak/mystem-docker)](https://goreportcard.com/report/github.com/azzzak/mystem-docker)
 
 Программа [MyStem](https://yandex.ru/dev/mystem/) — морфологический анализатор русского текста от Яндекса. Задача mystem-docker: упаковать MyStem в Docker-контейнер и работать с программой по http-протоколу.
 
