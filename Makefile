@@ -11,5 +11,5 @@ push:
 	@docker push ${NAME}
 
 tag:
-	@git tag -a ${GIT_VER} -m "Version ${GIT_VER}"
+	@git tag -a ${GIT_VER} -m "Version ${VER}"
 	@git push origin ${GIT_VER}
