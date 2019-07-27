@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -21,6 +22,9 @@ var timeout time.Duration = 1000
 var (
 	stdin  io.WriteCloser
 	stdout io.ReadCloser
+
+	b   = bytes.NewReader([]byte{})
+	buf = bufio.NewReader(b)
 )
 
 var errEmptyString = errors.New("Empty string")
@@ -94,17 +98,12 @@ func runMystem(args []string) (io.WriteCloser, io.ReadCloser, error) {
 
 func isTrue(s string) bool {
 	s = strings.ToLower(s)
-	if s == "true" || s == "yes" {
-		return true
-	}
-	return false
+	return s == "true" || s == "yes"
 }
 
 func isDictExist(file string) bool {
 	if _, err := os.Stat(file); err != nil {
-		if os.IsNotExist(err) {
-			return false
-		}
+		return !os.IsNotExist(err)
 	}
 	return true
 }
@@ -122,7 +121,7 @@ func process(ctx context.Context, text string) (string, error) {
 		defer close(errChan)
 
 		fmt.Fprintln(stdin, text)
-		buf := bufio.NewReader(stdout)
+		buf.Reset(stdout)
 
 		str, err := buf.ReadString('\n')
 		if err != nil {
