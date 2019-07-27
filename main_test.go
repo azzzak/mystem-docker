@@ -7,11 +7,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 )
 
 func Test_process(t *testing.T) {
@@ -73,6 +75,34 @@ func Test_process(t *testing.T) {
 				t.Errorf("process() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func Benchmark_process(b *testing.B) {
+	words := []string{"слон", "снег", "стон", "стул", "стих"}
+	rand.Seed(time.Now().UnixNano())
+
+	for i := 0; i < b.N; i++ {
+		buf := new(bytes.Buffer)
+		stdin = &helperWriteCloser{
+			io.Writer(buf),
+		}
+
+		random := rand.Intn(len(words))
+		word := words[random]
+		fmt.Fprintln(stdin, word)
+
+		buffer := bufio.NewReader(buf)
+		str, err := buffer.ReadString('\n')
+		if err != nil {
+			b.Log(err)
+		}
+
+		// s := fmt.Sprintln(genOutput(str))
+		bout := bytes.NewBufferString(str)
+		stdout = ioutil.NopCloser(bout)
+
+		process(context.Background(), word)
 	}
 }
 
